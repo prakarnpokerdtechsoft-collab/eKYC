@@ -1,0 +1,6 @@
+2026-03-11 17:04:40.436 +07:00 [INF] User profile is available. Using 'C:\Users\TSH\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-03-11 17:04:40.759 +07:00 [INF] Now listening on: https://localhost:7186
+2026-03-11 17:04:40.760 +07:00 [INF] Now listening on: http://localhost:5111
+2026-03-11 17:04:40.965 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-11 17:04:40.965 +07:00 [INF] Hosting environment: Development
+2026-03-11 17:04:40.965 +07:00 [INF] Content root path: E:\work\eKYC
