@@ -41,7 +41,7 @@ namespace EKYCWebhook.Services
 
             var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(json);
 
-            _token = tokenResponse.access_token;
+            _token = tokenResponse!.access_token;
             _tokenExpire = DateTime.UtcNow.AddSeconds(tokenResponse.expires_in - 60);
 
             return _token;
@@ -51,12 +51,12 @@ namespace EKYCWebhook.Services
         {
             var token = await GetAccessToken();
 
-            var options = new RestClientOptions("https://mac-portal.appmanteam.com/api/v3/case-keeper/proprietor-verifications");
-            var client = new RestClient(options);
-            var request = new RestRequest("");
-            request.AddHeader("accept", "application/json");
-            request.AddHeader("Authorization", $"Bearer {token}");
-            var response = await client.GetAsync(request);
+            //var options = new RestClientOptions("https://mac-portal.appmanteam.com/api/v3/case-keeper/proprietor-verifications");
+            //var client = new RestClient(options);
+            //var request = new RestRequest("");
+            //request.AddHeader("accept", "application/json");
+            //request.AddHeader("Authorization", $"Bearer {token}");
+            //var response = await client.GetAsync(request);
 
             var options2 = new RestClientOptions("https://mac-portal.appmanteam.com");
             var client2 = new RestClient(options2);
@@ -70,31 +70,7 @@ namespace EKYCWebhook.Services
 
             var response2 = await client2.ExecuteAsync(request2);
 
-            return response.Content!;
+            return response2.Content!;
         }
-
-
-
-        //public async Task<string> GetVerification(string verificationId)
-        //{
-        //    var token = await GetAccessToken();
-        //    _httpClient.DefaultRequestHeaders.Authorization =
-        //        new AuthenticationHeaderValue("Bearer", token);
-
-        //    var options = new RestClientOptions("https://mac-portal.appmanteam.com/api/v3/case-keeper/verifications/verificationId");
-        //    var client = new RestClient(options);
-        //    var request = new RestRequest("", Method.Get);
-        //    request.AddHeader("accept", "application/json");
-
-        //    request.AddParameter("verificationId", verificationId);
-        //    var response = await client.GetAsync(request);
-
-        //    //Console.WriteLine("{0}", response.Content);
-        //    //var response = await _httpClient.GetAsync(
-        //    //    $"https://CASE_KEEPER_API/verifications/{verificationId}"
-        //    //);
-
-        //    return await response.Content.ReadAsStringAsync();
-        //}
     }
 }
