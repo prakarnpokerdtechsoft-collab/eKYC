@@ -27,13 +27,12 @@ namespace EKYCWebhook.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> ReceiveWebhook([FromBody] WebhookEvent webhook)
+        public async Task<IActionResult> ReceiveWebhook([FromBody] WebhookEvent request)
         {
-            var verificationId = webhook.Data?.Id;
             ResponseDTO.ReceiveWebhook receiveWebhook = new ResponseDTO.ReceiveWebhook();
-            if (webhook.Key == "verification.completed")
+            if (request.key == "verification.verified")
             {
-                var result = await _ekycService.GetVerification(verificationId!);
+                var result = await _ekycService.GetVerification(request.dataId!);
                 receiveWebhook.succuss = true;
                 receiveWebhook.content = result;
                 receiveWebhook.message = "succuss";

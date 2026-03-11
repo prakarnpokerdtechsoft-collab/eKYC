@@ -58,9 +58,6 @@ namespace EKYCWebhook.Services
             request.AddHeader("Authorization", $"Bearer {token}");
             var response = await client.GetAsync(request);
 
-
-
-
             var options2 = new RestClientOptions("https://mac-portal.appmanteam.com");
             var client2 = new RestClient(options2);
 
@@ -72,12 +69,6 @@ namespace EKYCWebhook.Services
             request2.AddHeader("Authorization", $"Bearer {token}");
 
             var response2 = await client2.ExecuteAsync(request2);
-
-
-
-
-
-
 
             return response.Content!;
         }

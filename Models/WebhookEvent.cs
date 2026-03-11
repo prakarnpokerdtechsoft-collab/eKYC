@@ -2,12 +2,13 @@
 {
     public class WebhookEvent
     {
-        public string Key { get; set; }
-        public WebhookData Data { get; set; }
+        public string? key { get; set; }
+        public string? dataId { get; set; }
+        public WebhookData? Data { get; set; }
     }
 
     public class WebhookData
     {
-        public string Id { get; set; }
+        public string? status { get; set; }
     }
 }
