@@ -32,10 +32,12 @@ namespace EKYCWebhook.Controllers
             ResponseDTO.ReceiveWebhook receiveWebhook = new ResponseDTO.ReceiveWebhook();
             if (request.key == "verification.verified")
             {
+                _logger.LogInformation("dataId = " + request.dataId!);
                 var result = await _ekycService.GetVerification(request.dataId!);
                 receiveWebhook.succuss = true;
                 receiveWebhook.content = result;
                 receiveWebhook.message = "succuss";
+                _logger.LogInformation(result);
             }
             return Ok(receiveWebhook);
         }

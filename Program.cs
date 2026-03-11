@@ -2,8 +2,16 @@ using EKYCWebhook.Entity;
 using EKYCWebhook.Entity.Data;
 using EKYCWebhook.Services;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 var connectionString = builder.Configuration.GetConnectionString("AppContextConnection")
     ?? throw new InvalidOperationException("Connection string 'AppContextConnection' not found.");
