@@ -51,26 +51,24 @@ namespace EKYCWebhook.Services
         {
             var token = await GetAccessToken();
 
-            //var options = new RestClientOptions("https://mac-portal.appmanteam.com/api/v3/case-keeper/proprietor-verifications");
-            //var client = new RestClient(options);
-            //var request = new RestRequest("");
-            //request.AddHeader("accept", "application/json");
-            //request.AddHeader("Authorization", $"Bearer {token}");
-            //var response = await client.GetAsync(request);
+            var options = new RestClientOptions("https://mac-portal.appmanteam.com/api/v3/case-keeper/proprietor-verifications");
+            var client = new RestClient(options);
+            var request = new RestRequest("");
+            request.AddHeader("accept", "application/json");
+            request.AddHeader("Authorization", $"Bearer {token}");
+            var response = await client.GetAsync(request);
 
-            var options2 = new RestClientOptions("https://mac-portal.appmanteam.com");
-            var client2 = new RestClient(options2);
+            return response.Content!;
 
-            var request2 = new RestRequest(
-                $"/api/v3/case-keeper/verifications/{verificationId}",
-                Method.Get);
-
-            request2.AddHeader("accept", "application/json");
-            request2.AddHeader("Authorization", $"Bearer {token}");
-
-            var response2 = await client2.ExecuteAsync(request2);
-
-            return response2.Content!;
+            //var options2 = new RestClientOptions("https://mac-portal.appmanteam.com");
+            //var client2 = new RestClient(options2);
+            //var request2 = new RestRequest(
+            //    $"/api/v3/case-keeper/verifications/{verificationId}",
+            //    Method.Get);
+            //request2.AddHeader("accept", "application/json");
+            //request2.AddHeader("Authorization", $"Bearer {token}");
+            //var response2 = await client2.ExecuteAsync(request2);
+            //return response2.Content!;
         }
     }
 }
