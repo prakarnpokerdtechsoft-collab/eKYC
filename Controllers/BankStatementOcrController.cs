@@ -1,20 +1,51 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EKYCWebhook.Entity;
+using EKYCWebhook.Entity.Data;
+using EKYCWebhook.Models;
+using EKYCWebhook.Services;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
-[ApiController]
-[Route("api/ocr/bank-statement")]
-public class BankStatementOcrController : ControllerBase
+namespace EKYCWebhook.Controllers
 {
-    private readonly DocumentPipelineService _service;
-
-    public BankStatementOcrController(DocumentPipelineService service)
+    [ApiController]
+    [Route("api/ocr/bank-statement")]
+    public class BankStatementOcrController : ControllerBase
     {
-        _service = service;
-    }
+        private readonly DocumentPipelineService _service;
+        private readonly EKYCWebhookContext _context;
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetResult(string id)
-    {
-        var result = await _service.GetBankStatementResult(id);
-        return Ok(result);
+        public BankStatementOcrController(
+            DocumentPipelineService service,
+            EKYCWebhookContext context)
+        {
+            _service = service;
+            _context = context;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetResult(string id)
+        {
+            var result = await _service.GetBankStatementResult(id);
+            var ConvertResult = System.Text.Json.JsonSerializer.Deserialize<BankStatementResult>(result); //JsonSerializer.
+
+
+
+            if (result == null)
+                return NotFound();
+
+            var entity = new OcrBankStatement()
+            {
+                BankName = ConvertResult?.result?.bankNameTH!,
+                Id = Guid.Parse(ConvertResult?.id!),
+                AccountName = "",
+                AccountNumber = "",
+                CreatedAt = DateTime.Now
+            };
+
+            _context.OcrBankStatement.Add(entity);
+            await _context.SaveChangesAsync();
+
+            return Ok(result);
+        }
     }
 }

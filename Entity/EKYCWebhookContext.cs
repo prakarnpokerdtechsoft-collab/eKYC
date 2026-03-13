@@ -11,7 +11,7 @@ public class EKYCWebhookContext : IdentityDbContext<EKYCWebhookUsercs, Role, str
     }
 
     public DbSet<kyc_verification> kyc_verification { get; set; }
-
+    public DbSet<OcrBankStatement> OcrBankStatement { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
