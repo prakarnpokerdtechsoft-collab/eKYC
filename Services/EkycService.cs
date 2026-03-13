@@ -1,6 +1,5 @@
 ﻿using EKYCWebhook.Models;
 using RestSharp;
-using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace EKYCWebhook.Services
@@ -8,21 +7,18 @@ namespace EKYCWebhook.Services
     public class EkycService
     {
         private readonly HttpClient _httpClient;
-        private string _token;
-        private DateTime _tokenExpire;
+        //private string _token;
+        //private DateTime _tokenExpire;
+        private IHttpContextAccessor _accessor;
 
-        public EkycService(HttpClient httpClient)
+        public EkycService(HttpClient httpClient, IHttpContextAccessor accessor)
         {
             _httpClient = httpClient;
+            _accessor = accessor;
         }
 
         public async Task<string> GetAccessToken()
         {
-            if (!string.IsNullOrEmpty(_token) && DateTime.UtcNow < _tokenExpire)
-            {
-                return _token;
-            }
-
             var values = new Dictionary<string, string>
             {
                 { "client_id", "techsoft-ekyc-demo-case-keeper-service-account" },
@@ -38,13 +34,20 @@ namespace EKYCWebhook.Services
             );
 
             var json = await response.Content.ReadAsStringAsync();
+            var tokenResponse = JsonSerializer.Deserialize<ResponseDTO.TokenResponse>(json);
+            var token = tokenResponse!.access_token;
+            return token!;
+        }
 
-            var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(json);
-
-            _token = tokenResponse!.access_token;
-            _tokenExpire = DateTime.UtcNow.AddSeconds(tokenResponse.expires_in - 60);
-
-            return _token;
+        public async Task<string> Checktoken()
+        {
+            var gettoken = _accessor?.HttpContext?.Session.GetString("appmentoken");
+            if (String.IsNullOrEmpty(gettoken))
+            {
+                gettoken = await GetAccessToken();
+                _accessor?.HttpContext?.Session.SetString("appmentoken", gettoken!);
+            }
+            return gettoken!;
         }
 
         public async Task<string> GetVerification(string verificationId)

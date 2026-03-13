@@ -40,8 +40,16 @@ builder.Services.AddIdentity<EKYCWebhookUsercs, Role>()
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddHttpClient<EkycService>();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -90,10 +98,15 @@ app.Use(async (context, next) =>
 // ============================
 // PIPELINE
 // ============================
-
 app.UseHttpsRedirection();
-app.UseAuthorization();
+
 app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseSession();
+
+app.UseAuthorization();
 
 app.MapControllers();
 
