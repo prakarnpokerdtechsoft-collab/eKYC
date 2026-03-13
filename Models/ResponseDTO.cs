@@ -29,5 +29,20 @@
             public string? phoneNumber { get; set; }
             public string? title { get; set; }
         }
+
+        public class ProprietorsResponse
+        { 
+            public List<verificationsResponse>? verifications { get; set; }
+        }
+
+        public class verificationsResponse
+        {
+            public List<proprietorVerifications>? proprietorVerifications { get; set; }
+        }
+
+        public class proprietorVerifications
+        { 
+            public string? verificationId { get; set; }
+        }
     }
 }
