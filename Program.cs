@@ -33,6 +33,8 @@ builder.Services.AddDbContext<EKYCWebhookContext>(options =>
 builder.Services.AddIdentity<EKYCWebhookUsercs, Role>()
     .AddEntityFrameworkStores<EKYCWebhookContext>();
 
+builder.Services.AddScoped<DocumentPipelineService>();
+
 // ============================
 // SERVICES
 // ============================
