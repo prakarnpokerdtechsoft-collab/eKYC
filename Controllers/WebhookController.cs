@@ -56,8 +56,8 @@ namespace EKYCWebhook.Controllers
             request.AddBody(body);
 
             var response = await client.PostAsync(request);
-            var caseResponse = JsonSerializer.Deserialize<CaseCreateResponse>(response.Content!);
-            var caseId = caseResponse!.id;
+            //var caseResponse = JsonSerializer.Deserialize<CaseCreateResponse>(response.Content!);
+            //var caseId = caseResponse!.id;
 
 
             //var proprietorBody = new
@@ -81,7 +81,7 @@ namespace EKYCWebhook.Controllers
             //var response2 = await client.ExecuteAsync(request2);
 
 
-            return Ok(caseResponse);
+            return Ok(response.Content);
         }
 
         [HttpPost]
