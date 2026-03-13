@@ -36,13 +36,13 @@ namespace EKYCWebhook.Controllers
 
             var body = new
             {
-                citizenId = "1959800111204",
+                citizenId = "",
                 title = "006",
-                insuredFirstName = "กิตติพงศ์ แซ่เลี้ยง",
+                insuredFirstName = "",
                 insuredMiddleName = "",
-                insuredLastName = "แซ่เลี้ยง",
-                dateOfBirth = "1996-07-15",
-                phoneNumber = "0632409777",
+                insuredLastName = "",
+                dateOfBirth = "",
+                phoneNumber = "",
                 Email = "",
             };
 
