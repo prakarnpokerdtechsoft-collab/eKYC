@@ -7,6 +7,7 @@
 */obj
 */.vs
 
+
 # User-specific files
 *.rsuser
 *.suo
@@ -94,12 +95,12 @@ StyleCopReport.xml
 *.tmp
 *.tmp_proj
 *_wpftmp.csproj
-
+*.log
 *.vspscc
 *.vssscc
 .builds
 *.pidb
-
+*.svclog
 *.scc
 
 # Chutzpah Test files

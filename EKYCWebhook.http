@@ -1,6 +1,0 @@
-@EKYCWebhook_HostAddress = http://localhost:5111
-
-GET {{EKYCWebhook_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
