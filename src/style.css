@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-orange: #f57c1f;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --bg-color: #ffffff;
+  --white: #ffffff;
+  --border-color: #e5e7eb;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-dark);
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+  /* Full height on mobile */
+  background-color: var(--white);
+  position: relative;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+/* Fully Responsive */
+.orange-header, .news-header, .chat-header, .status-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.orange-header::before, .news-header::before, .chat-header::before, .status-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 100%;
+  background-color: inherit;
+  z-index: -1;
+  pointer-events: none;
+}
