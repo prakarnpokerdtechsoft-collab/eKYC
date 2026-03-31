@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.HttpOverrides;
 using Onboarding.Extensions;
 using Onboarding.Extensions.Persistence.Onboarding;
 using Onboarding.Middleware;
@@ -13,7 +14,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin", policy =>
     {
         policy.WithOrigins(
-            "https://ekyc-j7lp.onrender.com", "https://localhost:7164/"
+              "https://ekyc-j7lp.onrender.com",
+              "https://localhost:7164"
         )
         .AllowAnyHeader()
         .AllowAnyMethod();
@@ -54,6 +56,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 // ===================== EXCEPTION HANDLER (ต้องอยู่บนสุด) =====================
@@ -71,7 +75,7 @@ app.UseExceptionHandler(errorApp =>
     });
 });
 
-var basePath = !app.Environment.IsDevelopment() ? "/ON_API" : "";
+var basePath = !app.Environment.IsDevelopment() ? "" : ""; ; //? "/ON_API" : "";
 
 if (!string.IsNullOrEmpty(basePath))
 {
@@ -156,6 +160,12 @@ app.Use(async (context, next) =>
 
     // ===== COPY BACK =====
     await responseBody.CopyToAsync(originalBodyStream);
+});
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                       ForwardedHeaders.XForwardedProto
 });
 
 app.UseHttpsRedirection();
