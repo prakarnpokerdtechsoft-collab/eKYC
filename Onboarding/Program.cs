@@ -15,7 +15,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
               "https://ekyc-j7lp.onrender.com",
-              "https://localhost:7164"
+              "https://localhost:7164",
+              "https://ekyc-ui.onrender.com/"
         )
         .AllowAnyHeader()
         .AllowAnyMethod();
