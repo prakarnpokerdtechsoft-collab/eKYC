@@ -36,23 +36,23 @@ public class DocumentPipelineService : IDocumentPipelineService
             documents = response.Content
         };
 
-        var request2 = new RestRequest("/api/v1/document-pipeline/documentGroups");
-        request2.AddHeader("accept", "application/json");
-        request2.AddBody(groupbody);
-        var response2 = await client.PostAsync(request2);
-
-        Console.WriteLine("{0}", response.Content);
-
-
-
-        //var request2 = new RestRequest("/api/v1/document-pipeline/documentGroups", Method.Post);
+        //var request2 = new RestRequest("/api/v1/document-pipeline/documentGroups");
         //request2.AddHeader("accept", "application/json");
-        //request2.AddHeader("Authorization", $"Bearer {token}");
-        //request2.AddHeader("content-type", "application/json");
-        //request2.AddBody(body);
+        //request2.AddBody(groupbody);
         //var response2 = await client.PostAsync(request2);
 
-        Console.WriteLine("{0}", response2.Content);
+        //Console.WriteLine("{0}", response.Content);
+
+
+
+        ////var request2 = new RestRequest("/api/v1/document-pipeline/documentGroups", Method.Post);
+        ////request2.AddHeader("accept", "application/json");
+        ////request2.AddHeader("Authorization", $"Bearer {token}");
+        ////request2.AddHeader("content-type", "application/json");
+        ////request2.AddBody(body);
+        ////var response2 = await client.PostAsync(request2);
+
+        //Console.WriteLine("{0}", response2.Content);
 
 
 
