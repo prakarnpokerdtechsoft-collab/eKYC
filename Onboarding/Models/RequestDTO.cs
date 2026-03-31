@@ -59,5 +59,17 @@ namespace Onboarding.Models
             [JsonPropertyName("reference")]
             public string? Reference { get; set; }
         }
+
+        public class UploadFileDocument
+        { 
+            public IFormFile? FileAccess { get; set; }
+        }
+
+        public class CreateDocument
+        { 
+            public string? documentType { get; set; }
+            public string? fileName { get; set; }
+            public long? fileSize { get; set; }
+        }
     }
 }

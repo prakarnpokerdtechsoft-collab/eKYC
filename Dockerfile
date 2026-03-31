@@ -1,32 +1,32 @@
-# =========================
-# 1. Build Stage
-# =========================
+# 1. Base Stage: สำหรับรันแอปพลิเคชัน (ใช้ image ขนาดเล็ก)
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
+USER $APP_UID
+WORKDIR /app
+# เปิด Port มาตรฐานของ .NET 8 ขึ้นไป (ปรับเป็น 80/443 ได้ตามที่ตั้งค่าในแอป)
+EXPOSE 8080
+EXPOSE 8081
+
+# 2. Build Stage: สำหรับคอมไพล์โค้ด (ใช้ SDK image)
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# copy csproj และ restore ก่อน (ช่วย cache layer)
-COPY eKYC/Onboarding/Onboarding.csproj eKYC/Onboarding/
-RUN dotnet restore eKYC/Onboarding/Onboarding.csproj
+# Copy เฉพาะไฟล์ .csproj มาก่อนเพื่อ Restore dependencies (ใช้ Cache ของ Docker ให้เป็นประโยชน์)
+COPY ["Onboarding/Onboarding.csproj", "Onboarding/"]
+RUN dotnet restore "./Onboarding/Onboarding.csproj"
 
-# copy source ทั้งหมด
+# Copy Source Code ทั้งหมดแล้วทำการ Build
 COPY . .
+WORKDIR "/src/Onboarding"
+RUN dotnet build "./Onboarding.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# build
-WORKDIR /src/eKYC/Onboarding
-RUN dotnet publish Onboarding.csproj -c Release -o /app/publish
+# 3. Publish Stage: นำโค้ดที่ Build แล้วมา Publish เตรียมนำไปรัน
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./Onboarding.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# =========================
-# 2. Runtime Stage
-# =========================
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+# 4. Final Stage: นำไฟล์ที่ Publish แล้วไปใส่ใน Base Image เพื่อนำไปใช้งานจริง
+FROM base AS final
 WORKDIR /app
-
-# copy จาก build stage
-COPY --from=build /app/publish .
-
-# expose port (ปรับตามโปรเจกต์)
-EXPOSE 80
-EXPOSE 443
-
-# run app
+COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Onboarding.dll"]

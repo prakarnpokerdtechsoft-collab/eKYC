@@ -2,7 +2,9 @@
 using Onboarding.Core.Interfaces.Helper;
 using Onboarding.Core.Interfaces.Services;
 using Onboarding.Models;
+using RestSharp;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace Onboarding.Controllers
 {
@@ -35,15 +37,6 @@ namespace Onboarding.Controllers
                 dateOfBirth = model.Year == null ? "" : model.Year + "-" + model.Month + "-" + model.Day,
                 phoneNumber = model.Phone,
                 Email = model.Email == null ? "" : model.Email,
-
-                //citizenId = "",
-                //title = "",
-                //insuredFirstName = "",
-                //insuredMiddleName = "",
-                //insuredLastName = "",
-                //dateOfBirth = "",
-                //phoneNumber = "0632409777",
-                //Email = "",
             };
 
             var result = await _ekycService.CreateCase(body);
@@ -54,12 +47,29 @@ namespace Onboarding.Controllers
         }
 
         [HttpPost]
-        [Route("verifications/")] //เช้คสถานะ Verify ที่ส่งให้ user สแกน ocr ผ่าน sms
+        [Route("verifications")] //เช้คสถานะ Verify ที่ส่งให้ user สแกน ocr ผ่าน sms
         public async Task<IActionResult> Verifications(RequestDTO.Verifications model)
         {
             var result = await _ekycService.GetVerification(model);
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("create_document")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> CreateDocument([FromForm] RequestDTO.UploadFileDocument model)
+        {
+           var body = new RequestDTO.CreateDocument
+           {
+               documentType = "bankStatement",
+               fileName = model.FileAccess!.FileName,
+               fileSize = model.FileAccess!.Length,
+           };
+
+           var result = await _documentPipelineService.CreateDocument(body);
+            return Ok(result);
+        }
+
 
         [HttpGet]
         [Route("bank-statement")]
