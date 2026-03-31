@@ -12,10 +12,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
     {
-        policy
-            .AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        policy.WithOrigins(
+            "https://ekyc-j7lp.onrender.com", "https://localhost:7164/"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
@@ -157,16 +158,17 @@ app.Use(async (context, next) =>
     await responseBody.CopyToAsync(originalBodyStream);
 });
 
-app.UseCors("AllowSpecificOrigin");
-
-app.UseMiddleware<ErrorHandlerMiddleware>();
-
-// ===================== PIPELINE =====================
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
+app.UseCors("AllowSpecificOrigin");   // ต้องอยู่หลัง UseRouting
+
 app.UseSession();
+app.UseAuthentication();              // ถ้ามี
 app.UseAuthorization();
+
 app.MapControllers();
 app.Run();
 
